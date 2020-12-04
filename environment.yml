@@ -1,0 +1,4 @@
+name: advent2020
+dependencies:
+  - python
+  - click
