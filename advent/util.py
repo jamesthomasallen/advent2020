@@ -15,3 +15,7 @@ def read_data_dict(day: str) -> list[dict]:
         dict(tuple(item.split(':')) for item in group.split())
         for group in read_data(day, sep='\n\n')
     ]
+
+
+def read_data_list(day: str) -> list[list[str]]:
+    return [group.split('\n') for group in read_data(day, sep='\n\n')]
