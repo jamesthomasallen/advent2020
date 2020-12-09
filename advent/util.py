@@ -1,3 +1,4 @@
+from itertools import combinations
 from pathlib import Path
 
 
@@ -19,3 +20,10 @@ def read_data_dict(day: str) -> list[dict]:
 
 def read_data_list(day: str) -> list[list[str]]:
     return [group.split('\n') for group in read_data(day, sep='\n\n')]
+
+
+def sum_to_target(numbers: list[int], target: int, n: int) -> tuple:
+    for group in combinations(numbers, n):
+        if sum(group) == target:
+            return group
+    raise RuntimeError('No group found to match target')
