@@ -1,3 +1,4 @@
+from typing import Union
 from itertools import combinations
 from pathlib import Path
 
@@ -20,6 +21,12 @@ def read_data_dict(day: str) -> list[dict]:
 
 def read_data_list(day: str) -> list[list[str]]:
     return [group.split('\n') for group in read_data(day, sep='\n\n')]
+
+
+def read_data_timetable(day: str) -> tuple[int, list[Union[str, int]]]:
+    current_time_str, timetable_str = read_data(day)
+    timetable = [x if x == 'x' else int(x) for x in timetable_str.split(',')]
+    return int(current_time_str), timetable
 
 
 def sum_to_target(numbers: list[int], target: int, n: int) -> tuple:
