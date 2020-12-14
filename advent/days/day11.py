@@ -37,9 +37,11 @@ def count_visible(layout: list[str], max_distance: int = 0) -> list[list[int]]:
     if max_distance == 0:
         max_distance = max([max_x, max_y])
     count = [[0] * len(row) for row in layout]
-    for i, row in enumerate(layout):
-        for j, char in enumerate(row):
-            if char == OCCUP:
+    chair = [[c in (OCCUP, EMPTY) for c in row] for row in layout]
+    occup = [[c == OCCUP for c in row] for row in layout]
+    for i, row in enumerate(occup):
+        for j, o in enumerate(row):
+            if o:
                 for dx, dy in DIRECTIONS:
                     y, x = i, j
                     for dist in range(1, max_distance+1):
@@ -47,7 +49,7 @@ def count_visible(layout: list[str], max_distance: int = 0) -> list[list[int]]:
                         y += dy
                         if x < 0 or y < 0 or x >= max_x or y >= max_y:
                             break
-                        if layout[y][x] in (OCCUP, EMPTY):
+                        if chair[y][x]:
                             count[y][x] += 1
                             break
     return count
