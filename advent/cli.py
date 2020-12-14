@@ -2,6 +2,7 @@ from typing import Callable
 import importlib
 import os
 import pathlib
+from time import time as get_time
 
 import click
 
@@ -45,6 +46,15 @@ def check_and_print(day: str) -> None:
 @click.argument('day')
 def run(day: str) -> None:
     run_and_print(day)
+
+
+@main.command()
+@click.argument('day')
+def time(day: str) -> None:
+    t = get_time()
+    run_and_print(day)
+    delta = get_time() - t
+    print(f'Time: {delta}')
 
 
 @main.command()

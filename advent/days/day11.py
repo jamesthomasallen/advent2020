@@ -6,6 +6,7 @@ from advent.util import read_data
 FLOOR = '.'
 EMPTY = 'L'
 OCCUP = '#'
+DIRECTIONS = tuple(d for d in product([-1, 0, 1], [-1, 0, 1]) if d != (0, 0))
 
 
 def main() -> list[int]:
@@ -31,23 +32,23 @@ def step(layout: list[str], max_dist: int, thresh_high: int) -> list[str]:
 
 
 def count_visible(layout: list[str], max_distance: int = 0) -> list[list[int]]:
+    max_y = len(layout)
+    max_x = len(layout[0])
     if max_distance == 0:
-        max_distance = max([len(layout), len(layout[0])])
+        max_distance = max([max_x, max_y])
     count = [[0] * len(row) for row in layout]
     for i, row in enumerate(layout):
         for j, char in enumerate(row):
             if char == OCCUP:
-                for dx, dy in product([-1, 0, 1], [-1, 0, 1]):
-                    if dx == dy == 0:
-                        continue
+                for dx, dy in DIRECTIONS:
                     y, x = i, j
                     for dist in range(1, max_distance+1):
                         x += dx
                         y += dy
-                        if x < 0 or y < 0 or x >= len(row) or y >= len(layout):
+                        if x < 0 or y < 0 or x >= max_x or y >= max_y:
                             break
-                        count[y][x] += 1
                         if layout[y][x] in (OCCUP, EMPTY):
+                            count[y][x] += 1
                             break
     return count
 
