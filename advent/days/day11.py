@@ -19,40 +19,50 @@ def main() -> list[int]:
 
 
 def step_until_stable(layout: list[str], max_dist: int, thresh_high: int) -> list[str]:
+    visible = map_visible(layout, max_dist)
     while True:
-        next_layout = step(layout, max_dist, thresh_high)
+        next_layout = step(layout, visible, thresh_high)
         if next_layout == layout:
             return layout
         layout = next_layout
 
 
-def step(layout: list[str], max_dist: int, thresh_high: int) -> list[str]:
-    n_adjacent = count_visible(layout, max_dist)
+def step(layout: list[str], visible: list[list[list[tuple[int, int]]]], thresh_high: int) -> list[str]:
+    n_adjacent = count_visible(layout, visible)
     return update_seats(layout, n_adjacent, thresh_high=thresh_high)
 
 
-def count_visible(layout: list[str], max_distance: int = 0) -> list[list[int]]:
+def count_visible(layout: list[str], visible: list[list[list[tuple[int, int]]]]) -> list[list[int]]:
+    return [
+        [
+            sum(layout[y][x] == OCCUP for x, y in visible_list)
+            for char, visible_list in zip(layout_row, visible_row)
+        ]
+        for layout_row, visible_row in zip(layout, visible)
+    ]
+
+
+def map_visible(layout: list[str], max_dist: int) -> list[list[list[tuple[int, int]]]]:
     max_y = len(layout)
     max_x = len(layout[0])
-    if max_distance == 0:
-        max_distance = max([max_x, max_y])
-    count = [[0] * len(row) for row in layout]
+    if max_dist == 0:
+        max_dist = max([max_x, max_y])
+    visible = [[[] for _ in row] for row in layout]
     chair = [[c in (OCCUP, EMPTY) for c in row] for row in layout]
-    occup = [[c == OCCUP for c in row] for row in layout]
-    for i, row in enumerate(occup):
-        for j, o in enumerate(row):
-            if o:
+    for i, row in enumerate(chair):
+        for j, c in enumerate(row):
+            if c:
                 for dx, dy in DIRECTIONS:
                     y, x = i, j
-                    for dist in range(1, max_distance+1):
+                    for dist in range(1, max_dist+1):
                         x += dx
                         y += dy
                         if x < 0 or y < 0 or x >= max_x or y >= max_y:
                             break
                         if chair[y][x]:
-                            count[y][x] += 1
+                            visible[y][x].append((j, i))
                             break
-    return count
+    return visible
 
 
 def update_seats(layout: list[str], n_adjacent: list[list[int]],
