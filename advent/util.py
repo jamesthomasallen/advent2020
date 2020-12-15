@@ -9,8 +9,8 @@ def read_data(day: str, sep: str = '\n') -> list[str]:
     return path.read_text().strip().split(sep)
 
 
-def read_data_int(day: str) -> list[int]:
-    return [int(i) for i in read_data(day)]
+def read_data_int(day: str, sep: str = '\n') -> list[int]:
+    return [int(i) for i in read_data(day, sep)]
 
 
 def read_data_dict(day: str) -> list[dict]:
