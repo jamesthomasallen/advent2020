@@ -50,6 +50,22 @@ def read_data_bitmask_instructions(day: str) -> list[dict[str, Union[str, int]]]
     return result
 
 
+def read_data_tickets(day: str) -> tuple[dict[str, list[tuple[int, int]]], list[int], list[list[int]]]:
+    rules_str, my_ticket, nearby_tickets = read_data(day, sep='\n\n')
+    rules = {}
+    for rule in rules_str.split('\n'):
+        name, ranges = rule.split(': ')
+        rules[name] = []
+        for range_str in ranges.split(' or '):
+            rules[name].append(tuple(int(x) for x in range_str.split('-')))
+    my_ticket = [int(x) for x in my_ticket.removeprefix('your ticket:\n').split(',')]
+    nearby_tickets = [
+        [int(x) for x in nearby.split(',')]
+        for nearby in nearby_tickets.removeprefix('nearby tickets:\n').split('\n')
+    ]
+    return rules, my_ticket, nearby_tickets
+
+
 def sum_to_target(numbers: list[int], target: int, n: int) -> tuple:
     for group in combinations(numbers, n):
         if sum(group) == target:
