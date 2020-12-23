@@ -21,4 +21,5 @@ RESULTS = {
     'day20': [66020135789767, 1537],
     'day21': [1685, 'ntft,nhx,kfxr,xmhsbd,rrjb,xzhxj,chbtp,cqvc'],
     'day22': [35397, 31120],
+    'day23': [45286397, 836763710],
 }
