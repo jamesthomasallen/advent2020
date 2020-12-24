@@ -80,3 +80,13 @@ def count_adjacent(pattern: list[tuple[int, int, int]]) -> dict[tuple[int, int, 
 
 def add_direction(tile: tuple[int, ...], direction: str) -> tuple[int, ...]:
     return tuple(r + dr for r, dr in zip(tile, DIRECTIONS[direction]))
+
+
+def display_pattern(pattern: list[tuple[int, int, int]]) -> str:
+    radius = max(max(abs(i) for i in tile) for tile in pattern)
+    display = [[' ']*(4*radius+1) for _ in range(2*radius+1)]
+    z_0 = radius
+    x_0 = 2*radius
+    for x, y, z in pattern:
+        display[z_0 + z][x_0 + z + 2*x] = 'x'
+    return '\n'.join(''.join(row) for row in display)
